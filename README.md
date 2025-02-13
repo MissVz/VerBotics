@@ -130,4 +130,4 @@ pause
 - Ensure the **Sphero Mini is charged and connected** before running `sphero_control.js`.
 - If issues arise, check **error logs in `speech_to_command.py` and `sphero_control.js`**.
 
-### OpenAI. (2024). _Assistance with README documentation for VerBotics project._ ChatGPT (Version 4o) [Large language model]. https://platform.openai.com/
+OpenAI. (2024). _Assistance with README documentation for VerBotics project._ ChatGPT (Version 4o) [Large language model]. https://platform.openai.com/
