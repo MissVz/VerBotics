@@ -74,34 +74,77 @@ def transcribe_audio():
 
     return response.text
 
+def validate_command(command):
+    """Ensures angle, speed, and duration values stay within Sphero Mini's valid range."""
+
+    # Extract parameters safely
+    angle = command["parameters"].get("angle", 0)
+    speed = command["parameters"].get("speed", 100)
+    duration = command["parameters"].get("duration", 2)
+
+    # 🛑 Ensure angle is between 0-360
+    if angle < 0 or angle >= 360:
+        print(f"⚠️ Invalid angle {angle}, resetting to 0°.")
+        angle = 0  # Default to forward
+
+    # 🛑 Ensure speed is within -150 to 150
+    if speed < -150:
+        print(f"⚠️ Speed {speed} too low, setting to -150.")
+        speed = -150
+    elif speed > 150:
+        print(f"⚠️ Speed {speed} too high, setting to 150.")
+        speed = 150
+
+    # 🛑 Ensure duration is between 1 and 10 seconds
+    if duration < 1:
+        print(f"⚠️ Duration {duration} too short, setting to 1s.")
+        duration = 1
+    elif duration > 10:
+        print(f"⚠️ Duration {duration} too long, setting to 10s.")
+        duration = 10
+
+    # Update command with validated values
+    command["parameters"]["angle"] = angle
+    command["parameters"]["speed"] = speed
+    command["parameters"]["duration"] = duration
+
+    return command
+
+
 def process_command(spoken_text):
     """ Converts spoken command into structured JSON using GPT-4o. """
-    # prompt = f"Convert the following command into structured JSON for a robot:\n'{spoken_text}'"
     prompt = f"""
     Convert the following command into valid JSON **only**. Do not include any explanations, text, or markdown formatting.
-    Output format must strictly follow:
 
+    - If "quickly", "fast", "rapidly" appear, set speed **between 100-150**.
+    - If "slowly", "gently", "cautiously", appear, set speed **between 50-100**.
+    - If "reverse", "backward", "back up" appear:
+      - If no direction (e.g., "Move backward"), set speed to **negative (-50 to -150)**.
+      - If direction included (e.g., "Move backward left"), adjust **angle (e.g., 135° for back-left, 225° for back-right)** and keep speed **positive**.
+    - Ensure **angle is between 0-360** and **speed is between -150 and 150**.
+    - Ensure **duration is between 1 and 10 seconds**.
+
+    Output format:
     {{
-    "command": "move",
-    "parameters": {{
-        "angle": 0,   # Integer (0-360 degrees)
-        "speed": 100,  # Integer (0-999999)
-        "duration": 2  # Duration in seconds
+        "command": "move",
+        "parameters": {{
+            "angle": 0,   # Integer (0-360 degrees)
+            "speed": 100,  # Integer (-150 to 150)
+            "duration": 2  # Duration in seconds
+        }}
     }}
-    }}
-
-    Ensure there is **no additional text, no markdown, and no explanations.** 
 
     Command: '{spoken_text}'
     """
 
     client = openai.OpenAI(api_key=api_key)
     response = client.chat.completions.create(
-        model="gpt-4o-mini",  # Use GPT-4o-mini or adjust based on your plan
+        model="gpt-4o-mini",
         messages=[{"role": "user", "content": prompt}]
     )
 
     return response.choices[0].message.content
+
 
 if __name__ == "__main__":
     record_audio()
@@ -118,9 +161,13 @@ if __name__ == "__main__":
     command_file = COMMAND_FILE  # Use the correct path
     try:
         structured_command = json.loads(structured_command_cleaned)  # Ensure valid JSON
+        validated_command = validate_command(structured_command)  # Validate values
+
         with open(command_file, "w") as file:
-            json.dump(structured_command, file, indent=4)
-        print(f"Command saved to {command_file}, ready for execution.")
+            json.dump(validated_command, file, indent=4)
+        
+        print(f"✅ Command validated and saved: {validated_command}")
+
     except json.JSONDecodeError:
-        print("Error: GPT-4o-mini did not return valid JSON.")
+        print("❌ Error: GPT-4o-mini did not return valid JSON.")
         print(f"Raw Response:\n{structured_command_str}")
