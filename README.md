@@ -19,9 +19,11 @@ The VerBotics project integrates **OpenAI’s Whisper (Speech-to-Text)** and **G
 
 - **`speech_to_command.py`** processes Whisper’s output and converts it into structured JSON commands using GPT-4o-mini.
 - Ensures output matches Sphero’s required format:
+
   ```json
   {"direction": 0, "speed": 100, "duration": 2}
   ```
+
 - Saves the command to **`sphero_command.json`** for execution.
 
 ### **3️⃣ Sphero API Integration** ✅ **Complete**
@@ -70,14 +72,19 @@ The VerBotics project integrates **OpenAI’s Whisper (Speech-to-Text)** and **G
 ### **Windows:**
 
 1. Activate the virtual environment:
+
    ```powershell
    .venv\Scripts\Activate
    ```
+
 2. Install required dependencies:
+
    ```powershell
    pip install -r requirements.txt
    ```
+
 3. Run the automated script:
+
    ```powershell
    ./run_verbotics.bat
    ```
@@ -85,14 +92,19 @@ The VerBotics project integrates **OpenAI’s Whisper (Speech-to-Text)** and **G
 ### **Linux/macOS:**
 
 1. Activate the virtual environment:
+
    ```bash
    source .venv/bin/activate
    ```
+
 2. Install required dependencies:
+
    ```bash
    pip install -r requirements.txt
    ```
+
 3. Run the automated script:
+
    ```bash
    ./run_verbotics.sh
    ```
@@ -130,4 +142,4 @@ pause
 - Ensure the **Sphero Mini is charged and connected** before running `sphero_control.js`.
 - If issues arise, check **error logs in `speech_to_command.py` and `sphero_control.js`**.
 
-OpenAI. (2024). _Assistance with README documentation for VerBotics project._ ChatGPT (Version 4o) [Large language model]. https://platform.openai.com/
+OpenAI. (2024). _Assistance with README documentation for VerBotics project._ ChatGPT (Version 4o) [Large language model]. <https://platform.openai.com/>
