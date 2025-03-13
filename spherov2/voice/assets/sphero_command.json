@@ -1,0 +1,8 @@
+{
+    "command": "move",
+    "parameters": {
+        "angle": 90,
+        "speed": 100,
+        "duration": 1
+    }
+}

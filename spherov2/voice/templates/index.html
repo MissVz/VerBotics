@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sphero Speech Command</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+  <div class="background-overlay"></div>
+  <div class="container">
+    <header>
+      <h1>Sphero Speech Command</h1>
+    </header>
+
+    <div class="controls">
+      <button id="recordButton">🎤 Record</button>
+      <button id="stopButton" disabled>⏹ Stop</button>
+    </div>
+
+    <div id="status"></div>
+
+    <!-- Transcribed Text -->
+    <section class="output-section">
+      <h2>🗣 Transcribed Text</h2>
+      <p id="transcribedText">Waiting for speech...</p>
+    </section>
+
+    <!-- Generated Command -->
+    <section class="output-section">
+      <h2>🎮 Generated Command</h2>
+      <pre id="commandOutput">Awaiting command...</pre>
+    </section>
+
+    <footer>
+      <p>&copy; 2025 Sphero Voice Control</p>
+    </footer>
+  </div>
+
+  <!-- Your JS file -->
+  <script src="../static/script.js"></script>
+</body>
+</html>
